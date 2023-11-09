@@ -16,15 +16,14 @@ import java.util.List;
 public class LivreController {
     @Autowired
     UsuarioService service;
-    @Autowired
-    UsuarioRepository repository;
-    @GetMapping("/cadastrar")
-    public String criarUsario(){
-        service.demoCreate();
-        return "Usuarios criados";
+
+    @GetMapping("/teste")
+    public String testeLivre(){
+        return "Rota Livre";
     }
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Usuario>> getAll(){
-        return ResponseEntity.ok(repository.findAll());
+    @GetMapping("/configurar")
+    public String configurarAdmin(){
+        service.create(new Usuario("admin", "admin", "ADMIN"));
+        return "<h3>Admin configurado!</h3><br><p>Usuario: admin - Senha: admin";
     }
 }

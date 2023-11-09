@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.List;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -19,27 +22,19 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     PasswordEncoder encoder;
 
+    public Usuario getByUsername(String username){
+        return repository.findByUsername(username);
+    }
+
     @Transactional
-    public void demoCreate(){
-        Usuario admin = new Usuario();
-        Usuario user = new Usuario();
-        Usuario cliente = new Usuario();
+    public Usuario create(Usuario usuario){
+        Assert.isNull(getByUsername(usuario.getUsername()), "Usuario já existe!");
+        usuario.setSenha(encoder.encode(usuario.getSenha()));
+        return repository.save(usuario);
+    }
 
-        admin.setUsername("admin");
-        admin.setSenha(encoder.encode("admin"));
-        admin.setRole(Role.ADMIN);
-
-        user.setUsername("user");
-        user.setSenha(encoder.encode("user"));
-        user.setRole(Role.USER);
-
-        cliente.setUsername("cliente");
-        cliente.setSenha(encoder.encode("cliente"));
-        cliente.setRole(Role.CLIENTE);
-
-        repository.save(admin);
-        repository.save(user);
-        repository.save(cliente);
+    public List<Usuario> getAll(){
+        return repository.findAll();
     }
 
     @Override
@@ -48,10 +43,6 @@ public class UsuarioService implements UserDetailsService {
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado: " + username);
         }
-
-        return User.withUsername(usuario.getUsername())
-                .password(usuario.getSenha())
-                .roles(String.valueOf(usuario.getRole()))
-                .build();
+        return usuario;
     }
 }
