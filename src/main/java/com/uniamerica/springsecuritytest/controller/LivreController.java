@@ -1,5 +1,6 @@
 package com.uniamerica.springsecuritytest.controller;
 
+import com.uniamerica.springsecuritytest.entity.Role;
 import com.uniamerica.springsecuritytest.entity.Usuario;
 import com.uniamerica.springsecuritytest.repository.UsuarioRepository;
 import com.uniamerica.springsecuritytest.service.UsuarioService;
@@ -23,7 +24,7 @@ public class LivreController {
     }
     @GetMapping("/configurar")
     public String configurarAdmin(){
-        service.create(new Usuario("admin", "admin", "ADMIN"));
+        service.create(new Usuario("admin", "admin", Role.ADMIN));
         return "<h3>Admin configurado!</h3><br><p>Usuario: admin - Senha: admin";
     }
 }

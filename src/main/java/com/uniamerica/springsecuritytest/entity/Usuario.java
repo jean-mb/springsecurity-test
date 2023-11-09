@@ -31,9 +31,9 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
-    public Usuario(String username, String senha, String role) {
+    public Usuario(String username, String senha, Role role) {
         this.username = username;
         this.senha = senha;
         this.role = role;
@@ -42,7 +42,7 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authoritySet = new HashSet<>();
-        authoritySet.add(new SimpleGrantedAuthority(this.role));
+        authoritySet.add(new SimpleGrantedAuthority(this.role.toString()));
         return authoritySet;
     }
 
